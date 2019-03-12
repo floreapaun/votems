@@ -81,16 +81,15 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                  SimVot
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                    <a href="https://laravel.com/docs"><img src="{{url('images/parties_logos/psdlogo.png')}}" alt="Image"/></a>
+                    <a href="https://laracasts.com"><img src="{{url('images/parties_logos/pnllogo.png')}}" alt="Image"/></a>
+                    <a href="https://laravel-news.com"><img src="{{url('images/parties_logos/aldelogo.jpg')}}" alt="Image"/></a>
+                    <a href="https://nova.laravel.com"><img src="{{url('images/parties_logos/usrlogo.png')}}" alt="Image"/></a>
+                    <a href="https://forge.laravel.com"><img src="{{url('images/parties_logos/udmrlogo.png')}}" alt="Image"/></a>
                 </div>
             </div>
         </div>

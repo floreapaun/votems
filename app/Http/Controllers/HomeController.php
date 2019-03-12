@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 
 class HomeController extends Controller
@@ -26,13 +27,6 @@ class HomeController extends Controller
     public function index()
     {
         /*
-        $names = DB::table('users')
-            ->join('votes', 'users.user_id', '=', 'votes.user_id')
-            ->select('users.first_name')->where('votes.candidate_id', '=', '1')
-            ->get();
-         */
-
-        /*
         SELECT candidat.nume, candidat.prenume, candidat.nume_partid,
                           COUNT(candidat.nume) AS voturi FROM candidat
                           INNER JOIN voturi ON voturi.id_candidat=candidat.id_candidat
@@ -43,11 +37,42 @@ class HomeController extends Controller
                           INNER JOIN votes ON votes.candidate_id=candidates.candidate_id
                           GROUP BY candidates.first_name ORDER BY count(candidates.first_name)
         */
-        
-        //dd($names); 
-        //
+
+        $loggeduser_id = Auth::id();        
+        //dd($loggeduser_id);
+        $voter_row = DB::table('votes')
+            ->where('user_id', '=', $loggeduser_id)
+            ->get();
+
 
         $data = array();
+
+        //if logged user not voted so far
+        if(!count($voter_row)) 
+        {
+            $data['user_voted'] = 0;
+
+            $countyname_arr = DB::table('counties')
+                            ->select('county_name')
+                            ->get();
+            $data['countyname_arr'] = $countyname_arr;
+
+            $partyname_arr = DB::table('parties')
+                            ->select('party_name')
+                            ->get();
+            $data['partyname_arr'] = $partyname_arr;
+
+            $fields = ['candidate_id', 'first_name', 'second_name'];
+            $candidate_arr = DB::table('candidates')
+                             ->select($fields)
+                             ->get();
+            $data['candidate_arr'] = $candidate_arr;
+
+        }
+        else
+        {
+            $data['user_voted'] = 1;
+
 
         $fields = ['candidates.first_name', 'candidates.second_name', 'candidates.party'];
         $top_arr = DB::table('candidates')
@@ -56,6 +81,7 @@ class HomeController extends Controller
         $top_arr = $top_arr->addSelect(DB::raw('count(candidates.first_name) as votes_cnt'))
                                ->groupBy('candidates.first_name')
                                ->orderBy('votes_cnt', 'DESC')
+                               ->take(10)
                                ->get();
         $data['top_arr'] = $top_arr;
 
@@ -76,8 +102,10 @@ class HomeController extends Controller
         $last_arr = $last_arr->addSelect(DB::raw('candidates.first_name as cfirst_name'))
                     ->addSelect(DB::raw('candidates.second_name as csecond_name'))
                     ->orderBy('votes.user_id', 'desc')
+                    ->take(10)
                     ->get(); 
         $data['last_arr'] = $last_arr;
+        }
         //dd(compact("data"));
 
         return view('home', compact("data"));

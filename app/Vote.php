@@ -8,6 +8,16 @@ class Vote extends Model
 {
     protected $primaryKey = 'user_id';
 
+    protected $fillable = [
+        'user_id',
+        'candidate_id',
+        'party_name',
+        'county_name',
+        'vote_time',
+        'vote_date',
+        'ip',
+        'os'];
+
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id', 'user_id');

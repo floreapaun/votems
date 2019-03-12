@@ -20,5 +20,8 @@ Route::get('/generate', 'GenerateController@index')->name('generate');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::post('/getvalue', 'AjaxGenerateController@index')->name('getvalue');
+Route::post('/getvalue', 'AjaxController@index')->name('getvalue');
+Route::post('/getcandid', 'AjaxController@getcandid')->name('getcandid');
+Route::post('/getparty', 'AjaxController@getparty')->name('getparty');
+Route::post('/makevote', 'MakeVoteController@store')->name('makevote');
 

@@ -10,42 +10,23 @@
     <title>{{ config('app.name') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-    <script>
-        function getValue(bttn_id){
-            var helpdat;
-            if(bttn_id === "BttnGenAvgAge")
-                helpdat = $("#party").val();
-            
-            console.log(helpdat);
-            $.ajax({
-               type:'POST',
-               url :'/getvalue',
-               headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-               data:{ 'bttn_id' : bttn_id, 'helpdat' : helpdat },
-               dataType: 'json', 
-               success:function(data){
-                   $("#AvgAge").empty();
-                   if(data.bttn_id === "BttnGenAvgAge")
-                        $("#AvgAge").append("<p class='green_message'>" + data.value + ' ani </p>');
-                   else
-                        $("#AvgAge").append("<p class='green_message'>" + data.bttn_id + " " + data.value + ' ani </p>');
-               }
-            });
-        }
-    </script>
+    <script src="{{ asset('js/app.js') }}"></script> 
+    <script src="{{ asset('js/simvot.js') }}" defer></script> 
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/simvot.css') }}" rel="stylesheet">
+
 </head>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{ url('/home') }}">
                     {{ config('app.name') }}
                 </a>
                 <a class="navbar-brand" href="{{ url('/generate') }}">

@@ -6,9 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Candidate;
 
-//dd($bttn);
-
-class AjaxGenerateController extends Controller
+class AjaxController extends Controller
 {
     public function index(){
         $bttn_id = $_POST["bttn_id"];
@@ -45,23 +43,19 @@ class AjaxGenerateController extends Controller
        $candid_id = $_POST['candid_id'];
        $party = DB::table('candidates')
                  ->where('candidate_id', '=', $candid_id)
-                 ->select('party_name')
+                 ->select('party')
                  ->get();
-
-       return response()->json(compact('party'), 200);
+       //dd($party);
+       return response()->json($party, 200);
    }
    
    public function getcandid() {
        $party_name = $_POST['party'];
        $candid_id = DB::table('candidates')
-                 ->where('party_name', '=', $party_name)
+                 ->where('party', '=', $party_name)
                  ->select('candidate_id')
                  ->get();
 
-       return response()->json(compact('candid_id'), 200);
+       return response()->json($candid_id, 200);
    }
-
-
-
-
 }
