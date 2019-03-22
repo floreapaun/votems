@@ -24,4 +24,5 @@ Route::post('/getvalue', 'AjaxController@index')->name('getvalue');
 Route::post('/getcandid', 'AjaxController@getcandid')->name('getcandid');
 Route::post('/getparty', 'AjaxController@getparty')->name('getparty');
 Route::post('/makevote', 'MakeVoteController@store')->name('makevote');
+Route::post('/get_image_data', 'AjaxController@get_image_data')->name('get_image_data');
 

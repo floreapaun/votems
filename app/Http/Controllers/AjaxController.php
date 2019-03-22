@@ -58,4 +58,76 @@ class AjaxController extends Controller
 
        return response()->json($candid_id, 200);
    }
+
+   public function get_image_data() {
+       $region = $_POST['region'];
+       /*
+        $fields = ['candidates.first_name', 'candidates.second_name', 'candidates.party'];
+        $top_arr = DB::table('votes')
+                     ->join('candidates', 'candidates.candidate_id', '=', 'votes.candidate_id')
+                     ->join('counties', 'votes.county_name', '=', 'counties.county_name')
+                     ->where('counties.region', '=', $region)
+                     ->select($fields);
+        $top_arr = $top_arr->addSelect(DB::raw('count(candidates.first_name) as votes_cnt'))
+                               ->groupBy('candidates.first_name')
+                               ->orderBy('votes_cnt', 'DESC')
+                               ->take(7)
+                               ->get();
+        dd($top_arr);
+        $data['top_arr'] = $top_arr;
+        */
+
+        /*
+        SELECT COUNT(candidates.first_name) AS votes_cnt, candidates.party
+        FROM votes
+        INNER JOIN candidates ON votes.candidate_id = candidates.candidate_id
+        INNER JOIN counties ON votes.county_name = counties.county_name
+        WHERE counties.region = "Transilvania"
+        GROUP BY candidates.first_name
+        ORDER BY votes_cnt DESC
+        */
+
+        $top_arr = DB::table('votes')
+                     ->join('candidates', 'candidates.candidate_id', '=', 'votes.candidate_id')
+                     ->join('counties', 'votes.county_name', '=', 'counties.county_name')
+                     ->where('counties.region', '=', $region)
+                     ->select('candidates.party');
+        $top_arr = $top_arr->addSelect(DB::raw('count(candidates.first_name) as votes_cnt'))
+                               ->groupBy('candidates.first_name')
+                               ->orderBy('votes_cnt', 'DESC')
+                               ->get();
+       //top_arr is a Collection object
+
+       /*
+           I want to put on graph first six parties ascended and alphabeticallyy ordered.
+           And a "the rest of the parties" procent.
+       */
+        //dd($top_arr);
+        $bottom_cnt = 0;
+
+        //count the votes of the last parties
+        for($i = 6; $i < sizeof($top_arr); $i++) {
+            //echo $top_arr[$i]->party . " ";
+            $bottom_cnt += $top_arr[$i]->votes_cnt;
+        }
+        //dd($bottom_cnt); 
+
+        $topfirst_arr = array();
+        for($i = 0; $i < 6; $i++) {
+            $topfirst_arr[$i]["party"] = $top_arr[$i]->party;
+            $topfirst_arr[$i]["votes_cnt"] = $top_arr[$i]->votes_cnt;
+        }
+        //dd($topfirst_arr);
+        
+        $topfirst_arr[6]["party"] = "restul_partidelor";
+        $topfirst_arr[6]["votes_cnt"] = $bottom_cnt;
+        //dd($topfirst_arr);
+
+        //dd($top_arr);
+        $data['top_arr'] = $top_arr;
+        //dd($top_arr);
+        //dd($data);
+        //dd(compact("data"));
+       return response()->json($topfirst_arr, 200);
+   }
 }

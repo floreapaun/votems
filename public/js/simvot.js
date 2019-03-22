@@ -39,6 +39,56 @@ $("#candidate").change(function() {
                 
 });
 
+$("#BttnGenTopRegion").click(function() {
+    console.log("BttnGenTopRegion button pressed");
+    console.log(this);
+    var id_select = $(this).prev().attr('id');
+    console.log(id_select);
+    var region = $('#' + id_select).val();
+    console.log(region);
+    
+    function Capitalize(str) {
+        //console.log(str);
+        var newstr = '';
+        if(str === "restul_partidelor") {
+            newstr = "Restul";
+            return newstr;
+        }
+        for(var i = 0; i < str.length; i++) {
+            if(str[i] == str[i].toUpperCase()) {
+                newstr += str[i];
+                //console.log(str[i]);
+            }
+        }
+        //console.log(newstr);
+        return newstr;
+    }
+
+    $.ajax({ 
+        type: 'POST',
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        url: '/get_image_data',
+        data: { "region" : region },
+        dataType: "json",
+        type: 'post',
+        success: function(result) {
+                    var urlvars = "?nr=" + result.length + "&" + "region=" + region + "&";
+                    for(var i = 0; i < result.length; i++) {
+                        urlvars = urlvars + "votes_cnt" + i + "=" + result[i].votes_cnt;
+                        urlvars += "&";
+                    }
+                    for(var i = 0; i < result.length; i++) {
+                        urlvars = urlvars + "party_name" + i + "=" + Capitalize(result[i].party);
+                        urlvars += "&";
+                    }
+                    urlvars = urlvars.substring(0, urlvars.length-1);
+                    console.log(urlvars);
+                    $("#img_div").append("<img src='http://localhost/votems/jpgraph-4.2.6/src/piegraph.php" + urlvars +  "'>");
+                 }
+    });
+    
+});
+
 $('#party').change(function() {
     console.log("am schimbat partid");
     var party = $("#party").val();
