@@ -27,11 +27,19 @@ class AjaxController extends Controller
                 WHERE votes.party_name="Partidul Social Democrat" 
             */
 
+            /*
+            SELECT AVG(users.age) FROM votes
+            INNER JOIN users ON votes.user_id = users.user_id
+            INNER JOIN candidates ON votes.candidate_id = candidates.candidate_id
+            WHERE candidates.party = "Partidul Social Democrat"
+            */
+
             $value = DB::table('votes')
                 ->join('users', 'votes.user_id', '=', 'users.user_id')
-                ->where('votes.party_name', '=', $pname)
+                ->join('candidates', 'votes.candidate_id', '=', 'candidates.candidate_id')
+                ->where('candidates.party', '=', $pname)
                 ->avg('users.age');
-
+            
             return response()->json(compact("bttn_id", "value"), 200);
         }
         else

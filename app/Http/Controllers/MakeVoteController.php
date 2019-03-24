@@ -26,7 +26,6 @@ class MakeVoteController extends Controller
         $this->validate($request, [
             'candidate_id' => 'required',
             'county_name' => 'required',
-            'party_name' => 'required',
             'os' => 'required'
         ]);
 
@@ -34,7 +33,6 @@ class MakeVoteController extends Controller
         $vote = new Vote;
         $vote->user_id = Auth::id();
         $vote->candidate_id = request('candidate_id');
-        $vote->party_name = request('party_name');
         $vote->county_name = request('county_name');
         $vote->vote_time = date("H:i:s");
         $vote->vote_date = date("Y-m-d");
