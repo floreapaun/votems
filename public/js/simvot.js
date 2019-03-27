@@ -83,6 +83,7 @@ $("#BttnGenTopRegion").click(function() {
                     }
                     urlvars = urlvars.substring(0, urlvars.length-1);
                     console.log(urlvars);
+                    $("#img_div").empty();
                     $("#img_div").append("<img src='http://localhost/votems/jpgraph-4.2.6/src/piegraph.php" + urlvars +  "'>");
                  }
     });
