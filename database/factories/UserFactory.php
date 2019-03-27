@@ -14,11 +14,41 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\User::class, function (Faker $faker) {
+    
+    $age = array();
+    $index = 0;
+    for($i = 18; $i < 71; $i++)
+        $age[$index++] = $i;
+
+    $family = array();
+    $index = 0;
+    for($i = -1; $i < 6; $i++)
+        $family[$index++] = $i;
+    $family[$index] = 10;
+
+    $ok = false;
+    while(!$ok) {
+        $name = $faker->unique()->name;
+        $str_arr = explode(" ", $name);
+        if(count($str_arr) == 2) {
+            $ok = true;
+            $first_name = $str_arr[0];
+            $second_name = $str_arr[1];
+        }
+    }
+
     return [
-        'name' => $faker->name,
+        'first_name' => $first_name,
+        'second_name' => $second_name,
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
+        'password' => password_hash("123456", PASSWORD_DEFAULT),
+        'age' => $faker->randomElement($age),
+        'education' => $faker->randomElement(['0', '1']),
+        'income' => $faker->randomElement(['1', '2', '3']),
+        'family' => $faker->randomElement($family),
         'remember_token' => str_random(10),
+        'created_at' => now(),
+        'updated_at' => now()
     ];
 });
