@@ -29,11 +29,11 @@ span.badge.badge-primary, button.badge.badge-success
       <div class='col-sm-12'>
         <div class="form-inline">
           <span class="badge badge-primary">Numarul de voturi provenite din cel mai sarac judet din tara</span>
-          <button class="badge badge-success" id='BttnGenAvgAge' onclick="getValue(this.id)">Genereaza</button>
+          <button class="badge badge-success" id='BttnGenCntPoor'>Genereaza</button>
         </div>
       </div>
       <div class='col-sm-12'>
-        <p id='AvgAge'colspan='2'></p>
+        <p id='CntPoor'colspan='2'></p>
       </div>
       <div class='col-sm-12'>
         <div class="form-inline">
@@ -56,8 +56,8 @@ span.badge.badge-primary, button.badge.badge-success
       </div>
       <div class='col-sm-12'>
         <div class="form-inline">
-          <span class="badge badge-primary">Topul partidelor votate de tineri (18-30 ani)</span>
-          <button class="badge badge-success" id='BttnGenAvgAge' onclick="getValue(this.id)">Genereaza</button>
+          <span class="badge badge-primary">Topul partidelor votate de tineri (sub 30 ani)</span>
+          <button class="badge badge-success" id='BttnGenTopYng'>Genereaza</button>
         </div>
       </div>
       <div class='col-sm-12'>
@@ -66,7 +66,7 @@ span.badge.badge-primary, button.badge.badge-success
       <div class='col-sm-12'>
         <div class="form-inline">
           <span class="badge badge-primary">Topul partidelor votate de cei cu studii superioare</span>
-          <button class="badge badge-success" id='BttnGenAvgAge' onclick="getValue(this.id)">Genereaza</button>
+          <button class="badge badge-success" id='BttnGenTopHgh'>Genereaza</button>
         </div>
       </div>
       <div class='col-sm-12'>
