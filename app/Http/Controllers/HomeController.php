@@ -47,6 +47,17 @@ class HomeController extends Controller
 
         $data = array();
 
+        $reg_to_id_arr = [
+            "Banat" => 1,
+            "Crisana" => 1,
+            "Dobrogea" => 3,
+            "Maramures" => 4,
+            "Moldova" => 5,
+            "Muntenia" => 6,
+            "Oltenia" => 7,
+            "Transilvania" => 8
+        ];
+
         //if logged user not voted so far
         if(!count($voter_row)) 
         {
@@ -56,6 +67,33 @@ class HomeController extends Controller
                             ->select('county_name')
                             ->get();
             $data['countyname_arr'] = $countyname_arr;
+
+            $countyid_arr = DB::table('counties')
+                            ->select('county_id')
+                            ->get();
+            $data['countyid_arr'] = $countyid_arr;
+
+            $countyid_arr = DB::table('counties')
+                            ->select('county_id')
+                            ->get();
+            $data['countyid_arr'] = $countyid_arr;
+
+            $regid_arr = DB::table('counties')
+                            ->select('region')
+                            ->get();
+
+            $regionid_arr = array();
+            for($i = 0; $i < count($regid_arr); $i++)
+                $regionid_arr[$i] = $reg_to_id_arr[$regid_arr[$i]->region]; 
+        
+            //dd($regionid_arr);
+
+            $data['regionid_arr'] = $regionid_arr;
+
+            $countyreg_arr = DB::table('counties')
+                            ->select('region')
+                            ->get();
+            $data['countyreg_arr'] = $countyreg_arr;
 
             $partyname_arr = DB::table('parties')
                             ->select('party_name')

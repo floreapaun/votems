@@ -214,3 +214,68 @@ $('#party').change(function() {
                  }
     });
 });
+
+$('#area').on('change', function(){
+
+    var education = parseInt($("#user_education").val());
+    var income = parseInt($("#user_income").val());
+    var family = parseInt($("#user_family").val());
+    var region = $("#county").find(':selected').data('regid');
+    var county = parseInt($("#county").val());
+    var age = parseInt($("#user_age").val());
+    var area = parseInt($("#area").val());
+
+    var user_data = { 'education': education,
+                'income': income,
+                'family' : family,
+                'region' : region,
+                'county' : county,
+                'age' : age,
+                'area':  area };
+    console.log(user_data);
+
+    $("#div_bar").removeClass('hidden');   
+
+    $.ajax({
+        url: "http://pollvot/cgi-bin/script.py",
+        type: "post",
+        dataType:"json",
+        data: user_data ,
+        success: function(response){
+                    $("#div_bar").removeClass('hidden');   
+                    /*
+                    alert(response.message);
+                    alert(response.keys);
+                     */
+                    $('#candidate').val(response.pred);
+
+                    var candid_id = response.pred;
+                    $.ajax({ 
+                        type: 'POST',
+                        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        url: '/getparty',
+                        data: { "candid_id" : candid_id },
+                        dataType: "json",
+                        type: 'post',
+                        success: function(result) {
+                                    //$("#party option[value='" + result.party + "']").prop("selected", true);
+                                    $("#party").val(result[0].party);
+                                 }
+                    });
+
+                    $("#div_cand").removeClass('hidden');   
+                    $("#div_party").removeClass('hidden');   
+                    $("div.loader").addClass('hidden');
+                    $("span.green_message").text('Daca nu am reusit alege-ti din lista...');
+                    $("#div_VoteBttn").removeClass('hidden');
+                    //alert(response.pred);
+                 }
+    });
+
+
+});
+
+$('#county').on('change', function(){
+    console.log('Im going to start python script processing ');
+    $("#div_area").removeClass('hidden');   
+});

@@ -14,7 +14,8 @@ class DatabaseSeeder extends Seeder
         // Disable all mass assignment restrictions
         //Vote::unguard();
 
-        $this->call(VotesTableSeeder::class);
+        //$this->call(VotesTableSeeder::class);
+        $this->call(DvotesTableSeeder::class);
 
         // Re enable all mass assignment restrictions
         //Vote::reguard();
