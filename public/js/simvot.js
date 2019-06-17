@@ -1,26 +1,52 @@
 console.log("change functions added");
 
-function getValue(bttn_id){
-  var helpdat;
-  if(bttn_id === "BttnGenAvgAge")
-      helpdat = $("#party").val();
+function Capitalize(str) {
+  //console.log(str);
+  var newstr = '';
+  if(str === "restul_partidelor") {
+      newstr = "Restul";
+      return newstr;
+  }
 
-  console.log(helpdat);
-  $.ajax({
-     type:'POST',
-     url :'/get_avg_age',
-     headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-     data:{ 'bttn_id' : bttn_id, 'helpdat' : helpdat },
-     dataType: 'json', 
-     success:function(data){
-         $("#AvgAge").empty();
-         if(data.bttn_id === "BttnGenAvgAge")
-              $("#AvgAge").append("<p class='green_message'>" + data.value + ' ani </p>');
-         else
-              $("#AvgAge").append("<p class='green_message'>" + data.bttn_id + " " + data.value + ' ani </p>');
-     }
-  });
+  if(str === "Partidul Sabia Disciplinei")
+      return "PSA";
+  for(var i = 0; i < str.length; i++) {
+      if(str[i] == str[i].toUpperCase()) {
+          newstr += str[i];
+          //console.log(str[i]);
+      }
+  }
+  //console.log(newstr);
+  return newstr;
 }
+
+$("#BttnGenAvgAge").click(function() {
+    party = $("#party").val();
+    $.ajax({
+       type:'POST',
+       url :'/get_avg_age',
+       headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+       data:{ 'party' : party },
+       dataType: 'json', 
+       success:function(data){
+           $("#AvgAge").empty();
+           $("#AvgAge").append("<p class='green_message'>" + parseFloat(data.value).toFixed(1) + ' ani </p>');
+       }
+    });
+});
+
+$("#BttnGenTopCorrupt").click(function() {
+    $.ajax({
+       type:'POST',
+       url :'/get_win_corrupt',
+       headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+       dataType: 'json', 
+       success:function(data){
+           $("#TopCorrupt").empty();
+           $("#TopCorrupt").append("<p class='green_message'>" + data[1] + " a invins in " + data[0] + '!</p>');
+       }
+    });
+});
 
 $("#candidate").change(function() {
     console.log("am schimbat candidt");
@@ -63,22 +89,6 @@ $("#BttnGenTopRegion").click(function() {
     var region = $('#' + id_select).val();
     console.log(region);
     
-    function Capitalize(str) {
-        //console.log(str);
-        var newstr = '';
-        if(str === "restul_partidelor") {
-            newstr = "Restul";
-            return newstr;
-        }
-        for(var i = 0; i < str.length; i++) {
-            if(str[i] == str[i].toUpperCase()) {
-                newstr += str[i];
-                //console.log(str[i]);
-            }
-        }
-        //console.log(newstr);
-        return newstr;
-    }
 
     $.ajax({ 
         type: 'POST',
@@ -101,6 +111,7 @@ $("#BttnGenTopRegion").click(function() {
                     console.log(urlvars);
                     $("#img_div").empty();
                     $("#img_div").append("<img src='http://localhost/pollvot/jpgraph-4.2.6/src/piegraph_TopReg.php" + urlvars +  "'>");
+                    $("#img_div").append("<h5>" + region + "</h5>");
                  }
     });
     
@@ -108,24 +119,6 @@ $("#BttnGenTopRegion").click(function() {
 
 $("#BttnGenTopYng").click(function() {
     console.log("#BttnGenTopYng button has been pressed");
-
-    function Capitalize(str) {
-        //console.log(str);
-        var newstr = '';
-        if(str === "restul_partidelor") {
-            newstr = "Restul";
-            return newstr;
-        }
-        for(var i = 0; i < str.length; i++) {
-            if(str[i] == str[i].toUpperCase()) {
-                newstr += str[i];
-                //console.log(str[i]);
-            }
-        }
-        //console.log(newstr);
-        return newstr;
-    }
-
     var img_title = "Tineri";
 
     $.ajax({ 
@@ -148,6 +141,7 @@ $("#BttnGenTopYng").click(function() {
                     console.log(urlvars);
                     $("#img_div").empty();
                     $("#img_div").append("<img src='http://localhost/pollvot/jpgraph-4.2.6/src/piegraph_TopYng.php" + urlvars +  "'>");
+                    $("#img_div").append("<h5>Sub 30 ani</h5>");
                  }
     });
     
@@ -155,23 +149,6 @@ $("#BttnGenTopYng").click(function() {
 
 $("#BttnGenTopHgh").click(function() {
     console.log("#BttnGenTopHgh button has been pressed");
-
-    function Capitalize(str) {
-        //console.log(str);
-        var newstr = '';
-        if(str === "restul_partidelor") {
-            newstr = "Restul";
-            return newstr;
-        }
-        for(var i = 0; i < str.length; i++) {
-            if(str[i] == str[i].toUpperCase()) {
-                newstr += str[i];
-                //console.log(str[i]);
-            }
-        }
-        //console.log(newstr);
-        return newstr;
-    }
 
     var img_title = "Studii superioare";
     $.ajax({ 
@@ -194,6 +171,7 @@ $("#BttnGenTopHgh").click(function() {
                     console.log(urlvars);
                     $("#img_div").empty();
                     $("#img_div").append("<img src='http://localhost/pollvot/jpgraph-4.2.6/src/piegraph_TopYng.php" + urlvars +  "'>");
+                    $("#img_div").append("<h5>Studii superioare</h5>");
                  }
     });
     
@@ -232,21 +210,18 @@ $('#area').on('change', function(){
                 'county' : county,
                 'age' : age,
                 'area':  area };
-    console.log(user_data);
+    
+    //console.log(user_data);
 
     $("#div_bar").removeClass('hidden');   
 
     $.ajax({
-        url: "http://pollvot/cgi-bin/script.py",
+        url: "http://pollvot/cgi-bin/predict_script.py",
         type: "post",
         dataType:"json",
         data: user_data ,
         success: function(response){
                     $("#div_bar").removeClass('hidden');   
-                    /*
-                    alert(response.message);
-                    alert(response.keys);
-                     */
                     $('#candidate').val(response.pred);
 
                     var candid_id = response.pred;
@@ -258,7 +233,6 @@ $('#area').on('change', function(){
                         dataType: "json",
                         type: 'post',
                         success: function(result) {
-                                    //$("#party option[value='" + result.party + "']").prop("selected", true);
                                     $("#party").val(result[0].party);
                                  }
                     });
@@ -266,9 +240,8 @@ $('#area').on('change', function(){
                     $("#div_cand").removeClass('hidden');   
                     $("#div_party").removeClass('hidden');   
                     $("div.loader").addClass('hidden');
-                    $("span.green_message").text('Daca nu am reusit alege-ti din lista...');
+                    $("span.green_message").text('Daca nu am ghicit alege-ti din lista...');
                     $("#div_VoteBttn").removeClass('hidden');
-                    //alert(response.pred);
                  }
     });
 
@@ -278,4 +251,90 @@ $('#area').on('change', function(){
 $('#county').on('change', function(){
     console.log('Im going to start python script processing ');
     $("#div_area").removeClass('hidden');   
+});
+
+$("#gdp_county").on('change', function() {
+    
+    var nowgdp = $("#gdp_county").find(':selected').data('gdp')
+
+    $("#gdp_label").empty();
+    $("#gdp_input").empty();
+    $("#gdp_button").empty();
+
+    $("#gdp_label").append("<label for='gdp_up_input'>Introdu valoarea:</label>");
+    $("#gdp_input").append("<input type='text' id='gdp_up_input'" + 
+                              "name='gdp_up_input' value='" + nowgdp + "'></div>");
+    $("#gdp_button").append("<button type='submit' class='btn btn-success' id='BttnSendGdp'>Trimite</button>");
+}); 
+
+$("#corr_county").on('change', function() {
+    
+    var nowcorr = $("#corr_county").find(':selected').data('corr')
+
+    $("#corr_label").empty();
+    $("#corr_input").empty();
+    $("#corr_button").empty();
+    $("#gdp_ans").empty();
+
+    $("#corr_label").append("<label for='corr_up_input'>Introdu valoarea:</label>");
+    $("#corr_input").append("<input type='text' id='corr_up_input'" + 
+                              "name='corr_up_input' value='" + nowcorr + "'></div>");
+    $("#corr_button").append("<button type='submit' class='btn btn-success' id='BttnSendCorr'>Trimite</button>");
+}); 
+
+$(document).on('click', '#BttnSendGdp', function() {
+  console.log("aaa");
+
+  var newgdp = $("#gdp_up_input").val();
+  console.log(newgdp);
+  var county = $("#gdp_county").val();
+    $.ajax({ 
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        url: '/update_gdp',
+        data: { "gdp" : newgdp, "county" : county },
+        type: 'post',
+        dataType: "json",
+        success: function(result) {
+                    $('#gdp_ans').append("<span class='green_message'>Am modificat cu success!</span>");
+                    location.reload();
+                 }
+    });
+});
+
+$(document).on('click', '#BttnSendCorr', function() {
+  console.log("aaa");
+
+  var newcorr = $("#corr_up_input").val();
+  var county = $("#corr_county").val();
+    $.ajax({ 
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        url: '/update_corr',
+        data: { "corr" : newcorr, "county" : county },
+        type: 'post',
+        dataType: "json",
+        success: function(result) {
+                    $('#corr_ans').append("<span class='green_message'>Am modificat cu success!</span>");
+                    location.reload();
+                 }
+    });
+});
+
+$("#voting_state").on('change', function() {
+    console.log("checkbox changed!");
+    var stop_vote;
+    if(this.checked)
+      stop_vote = 1;
+    else
+      stop_vote = 0;
+    $.ajax({ 
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        url: '/write_voting_state',
+        data: { "stop_vote" : stop_vote },
+        type: 'post',
+        dataType: "json",
+        success: function(result) {
+                      console.log("wrote successfuly!");
+                 }
+    });
+
 });

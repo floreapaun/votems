@@ -12,6 +12,6 @@ class DvotesTableSeeder extends Seeder
     public function run()
     {
         //
-        factory('App\Dvote', 100)->create(); 
+        factory('App\Dvote', 189)->create(); 
     }
 }

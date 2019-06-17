@@ -102,9 +102,9 @@
                           <label for="salary" class="col-md-4 col-form-label text-md-right">{{ __('Venit lunar') }}</label>
                           <div class="col-md-6">
                             <select name="salary" class="form-control" id="salary">
-                              <option value="1">500-1400</option>
-                              <option value="2">1400-3500</option>
-                              <option value="3">peste 3500</option>
+                              <option value="1">500-1400 lei</option>
+                              <option value="2">1400-3500 lei</option>
+                              <option value="3">peste 3500 lei</option>
                             </select>
                           </div>  
                         </div>

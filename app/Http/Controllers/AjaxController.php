@@ -5,40 +5,34 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Candidate;
+use App\County;
 
 class AjaxController extends Controller
 {
     public function get_avg_age(){
-        $bttn_id = $_POST["bttn_id"];
-        //dd($bttn);
-        if($bttn_id === "BttnGenAvgAge")
-        {
 
-            $pname = $_POST["helpdat"];
+      $pname = $_POST["party"];
 
-            /*
-            $query = "SELECT AVG(votant.varsta) FROM voturi INNER JOIN votant 
-            ON voturi.id_votant=votant.id_votant WHERE voturi.nume_partid=?
-            GROUP BY voturi.nume_partid";
-            */
-    
-            /*
-            SELECT AVG(users.age) FROM votes
-            INNER JOIN users ON votes.user_id = users.user_id
-            INNER JOIN candidates ON votes.candidate_id = candidates.candidate_id
-            WHERE candidates.party = "Partidul Social Democrat"
-            */
+      /*
+      $query = "SELECT AVG(votant.varsta) FROM voturi INNER JOIN votant 
+      ON voturi.id_votant=votant.id_votant WHERE voturi.nume_partid=?
+      GROUP BY voturi.nume_partid";
+      */
 
-            $value = DB::table('votes')
-                ->join('users', 'votes.user_id', '=', 'users.user_id')
-                ->join('candidates', 'votes.candidate_id', '=', 'candidates.candidate_id')
-                ->where('candidates.party', '=', $pname)
-                ->avg('users.age');
-            
-            return response()->json(compact("bttn_id", "value"), 200);
-        }
-        else
-            return response()->json(array('data'=> "sssssss"), 200);
+      /*
+      SELECT AVG(users.age) FROM votes
+      INNER JOIN users ON votes.user_id = users.user_id
+      INNER JOIN candidates ON votes.candidate_id = candidates.candidate_id
+      WHERE candidates.party = "Partidul Social Democrat"
+      */
+
+      $value = DB::table('votes')
+          ->join('users', 'votes.user_id', '=', 'users.user_id')
+          ->join('candidates', 'votes.candidate_id', '=', 'candidates.candidate_id')
+          ->where('candidates.party', '=', $pname)
+          ->avg('users.age');
+      
+      return response()->json(compact("value"), 200);
 
    }
 
@@ -46,12 +40,10 @@ class AjaxController extends Controller
 
         $data_arr = array();
 
-        /*
-        SELECT COUNT(votes.user_id) AS cnt FROM `votes`
-        INNER JOIN counties
-        ON votes.county_name = counties.county_name
-        WHERE counties.gdp =
-        ( SELECT MIN(counties.gdp) FROM  counties);
+        /*SELECT candidates.party, COUNT(votes.user_id) AS cnt FROM `votes` 
+         INNER JOIN counties ON votes.county_name = counties.county_name 
+         INNER JOIN candidates ON votes.candidate_id = candidates.candidate_id 
+         WHERE counties.corruption_level = ( SELECT MAX(counties.corruption_level) FROM counties)
          */
         
        DB::enableQueryLog();
@@ -65,14 +57,40 @@ class AjaxController extends Controller
            ->select('user_id')->where('county_name', '=', $value->county_name)
            ->count();
 
-       /*
-       $value = DB::query()->fromSub(function ($query) {
-            $query->select('county_name')->from('counties')->orderBy('gdp', 'asc')->first();
-       }, 'countyname_poor')->select('user_id')->from('votes')->where('county_name', '=', 'Prahova')
-                             ->count();
-       */
-
        //dd(DB::getQueryLog());
+       //dd($value);
+       return response()->json($data_arr, 200);
+   }
+
+    public function get_win_corrupt() {
+
+        /*
+        SELECT candidates.party_name, COUNT(votes.user_id) AS cnt FROM `votes`
+        INNER JOIN counties
+        ON votes.county_name = counties.county_name
+        WHERE counties.corruption_level =
+        ( SELECT MAX(counties.corruption_level) FROM  counties);
+         */
+        
+
+       $data_arr = array();
+
+       $value = DB::table('counties')
+           ->select('county_name')->orderBy('corruption_level', 'desc')->first();
+        
+       $data_arr[0] = $value->county_name;
+
+       $top_arr = DB::table('votes')
+                     ->join('candidates', 'candidates.candidate_id', '=', 'votes.candidate_id')
+                     ->join('counties', 'votes.county_name', '=', 'counties.county_name')
+                     ->where('counties.county_name', '=', $value->county_name)
+                     ->select('candidates.party');
+       $top_arr = $top_arr->addSelect(DB::raw('count(candidates.first_name) as votes_cnt'))
+                               ->groupBy('candidates.first_name')
+                               ->orderBy('votes_cnt', 'DESC')
+                               ->get();
+       $data_arr[1] = $top_arr[0]->party;
+
        //dd($value);
        return response()->json($data_arr, 200);
    }
@@ -280,5 +298,32 @@ class AjaxController extends Controller
         //dd($data);
         //dd(compact("data"));
        return response()->json($topfirst_arr, 200);
+   }
+
+   public function update_gdp() {
+     $gdp = $_POST['gdp'];
+     $county = $_POST['county'];
+
+     County::where('county_name', '=', $county)->update(array('gdp' => $gdp));
+     return response()->json("sucess", 200);
+   }
+
+   public function update_corr() {
+     $corr = $_POST['corr'];
+     $county = $_POST['county'];
+
+     County::where('county_name', '=', $county)->update(array('corruption_level' => $corr));
+     return response()->json("sucess", 200);
+   }
+
+   public function write_voting_state() {
+     $stop_vote = $_POST["stop_vote"];
+
+     $myFile = "/srv/http/pollvot/public/state.txt";
+     $myFileLink = fopen($myFile, 'w+') or die("Can't open file.");
+     fwrite($myFileLink, $stop_vote);
+     fclose($myFileLink);
+
+     return response()->json("sucess", 200);
    }
 }

@@ -85,11 +85,12 @@
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs"><img src="{{url('images/parties_logos/psdlogo.png')}}" alt="Image"/></a>
-                    <a href="https://laracasts.com"><img src="{{url('images/parties_logos/pnllogo.png')}}" alt="Image"/></a>
-                    <a href="https://laravel-news.com"><img src="{{url('images/parties_logos/aldelogo.jpg')}}" alt="Image"/></a>
-                    <a href="https://nova.laravel.com"><img src="{{url('images/parties_logos/usrlogo.png')}}" alt="Image"/></a>
-                    <a href="https://forge.laravel.com"><img src="{{url('images/parties_logos/udmrlogo.png')}}" alt="Image"/></a>
+                    <a href="#"><img src="{{url('images/parties_logos/psdlogo.png')}}" alt="Image"/></a>
+                    <a href="#"><img src="{{url('images/parties_logos/pfmlogo.png')}}" alt="Image"/></a>
+                    <a href="#"><img src="{{url('images/parties_logos/pnllogo.png')}}" alt="Image"/></a>
+                    <a href="#"><img src="{{url('images/parties_logos/psalogo.png')}}" alt="Image"/></a>
+                    <a href="#"><img src="{{url('images/parties_logos/usrlogo.png')}}" alt="Image"/></a>
+                    <a href="#"><img src="{{url('images/parties_logos/udmrlogo.png')}}" alt="Image"/></a>
                 </div>
             </div>
         </div>

@@ -43,7 +43,7 @@ $graph = new PieGraph(300,300);
 $graph->SetShadow();
  
 // Set A title for the plot
-$graph->title->Set($img_title);
+$graph->title->Set("");
 $graph->title->SetFont(FF_VERDANA,FS_BOLD,12);
 $graph->title->SetColor('black');
  

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from sklearn.model_selection import train_test_split
+from keras.models import load_model
 from keras.models import Sequential
 from keras.layers.core import Dense, Activation
 import os
@@ -41,45 +42,25 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25, random
 model = Sequential()
 model.add(Dense(25, input_dim=x.shape[1], activation='relu')) # Hidden 1
 model.add(Dense(10, activation='relu'))# Hidden 2
+#model.add(Dense(10, activation='relu'))# Hidden 3
 model.add(Dense(1)) # Output
 model.compile(loss='mean_squared_error', optimizer='adam')
 
 monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=5, verbose=0, mode='auto')
 model.fit(x_train,y_train,validation_data=(x_test,y_test),callbacks=[monitor],verbose=0,epochs=100)
 
-arr = np.arange(7)
+model.save("model.h5")
+print("Saved model to disk")
 
-# values come in random order
-for k in fs.keys():
-    if (k == "education"):
-        arr[0] = fs.getvalue(k)
-    if (k == "income"):
-        arr[1] = fs.getvalue(k)
-    if (k == "family"):
-        arr[2] = fs.getvalue(k)
-    if (k == "region"):
-        arr[3] = fs.getvalue(k)
-    if (k == "county"):
-        arr[4] = fs.getvalue(k)
-    if (k == "age"):
-        arr[5] = fs.getvalue(k)
-    if (k == "area"):
-        arr[6] = fs.getvalue(k)
+pred = model.predict(x_test)
+# Measure MSE error.  
+score = metrics.mean_squared_error(pred,y_test)
+print("Final score (MSE): {}".format(score))
 
+# Measure RMSE error.  RMSE is common for regression.
+score = np.sqrt(metrics.mean_squared_error(pred,y_test))
+print("Final score (RMSE):{}".format(score))
 
-a = np.array([arr])
-pred = model.predict(a)
-
-#pd.Series(pred).to_json(orient='values')
-for x in np.nditer(pred):
-    val = x
-arr = val.ravel()
-
-result = {}
-result['pred'] = json.dumps(int(round(arr[0].item())))  
-
-sys.stdout.write(json.dumps(result,indent=1))
 sys.stdout.write("\n")
 sys.stdout.close()
-
 

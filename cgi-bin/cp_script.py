@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from sklearn.model_selection import train_test_split
+from keras.models import load_model
 from keras.models import Sequential
 from keras.layers.core import Dense, Activation
 import os
@@ -25,6 +26,9 @@ sys.stdout.write("\n")
 path = "/srv/http/pollvot/cgi-bin/"
 filename_read = os.path.join(path,"dvotes.csv")
 
+# load model
+model = load_model('model.h5')
+
 fs = cgi.FieldStorage()
 
 #read the content inside a DataFrame object
@@ -35,6 +39,7 @@ dataset=df.values
 x=dataset[:,[0, 1, 2, 3, 4, 5, 6]] 
 y=dataset[:,7] 
 
+'''
 # Split into train/test
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25, random_state=45)
 
@@ -46,9 +51,13 @@ model.compile(loss='mean_squared_error', optimizer='adam')
 
 monitor = EarlyStopping(monitor='val_loss', min_delta=1e-3, patience=5, verbose=0, mode='auto')
 model.fit(x_train,y_train,validation_data=(x_test,y_test),callbacks=[monitor],verbose=0,epochs=100)
+model.save("model.h5")
+print("Saved model to disk")
+'''
 
 arr = np.arange(7)
 
+'''
 # values come in random order
 for k in fs.keys():
     if (k == "education"):
@@ -65,9 +74,9 @@ for k in fs.keys():
         arr[5] = fs.getvalue(k)
     if (k == "area"):
         arr[6] = fs.getvalue(k)
+'''
 
-
-a = np.array([arr])
+a = np.array([[1, 2, 4, 1, 36, 77, 2]])
 pred = model.predict(a)
 
 #pd.Series(pred).to_json(orient='values')
@@ -81,5 +90,4 @@ result['pred'] = json.dumps(int(round(arr[0].item())))
 sys.stdout.write(json.dumps(result,indent=1))
 sys.stdout.write("\n")
 sys.stdout.close()
-
 

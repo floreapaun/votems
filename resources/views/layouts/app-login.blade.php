@@ -29,9 +29,28 @@
                 <a class="navbar-brand" href="{{ url('/home') }}">
                     {{ config('app.name') }}
                 </a>
-                <a class="navbar-brand" href="{{ url('/generate') }}">
-                    {{ "Genereaza sondaje" }}
-                </a>
+                {{-- afisez pentru votant doar cand votarea s-a terminat --}}
+                @php
+                    $myFile = "/srv/http/pollvot/public/state.txt";
+                    $f = fopen($myFile, 'r');
+                    $myFileContents = fread($f, filesize($myFile));
+                    fclose($f);
+                @endphp
+                
+                @if (Auth::user()->user_id != 877 && intval($myFileContents) == 1) 
+                  <a class="navbar-brand" href="{{ url('/generate') }}">
+                      {{ "Genereaza sondaje" }}
+                  </a>
+                @endif
+
+                @if (Auth::user()->user_id == 877)
+                  <a class="navbar-brand" href="{{ url('/generate') }}">
+                      {{ "Genereaza sondaje" }}
+                  </a>
+                  <a class="navbar-brand" href="{{ url('/update') }}">
+                      {{ "Actualizeaza" }}
+                  </a>
+                @endif
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>

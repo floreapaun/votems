@@ -127,54 +127,55 @@
         @else
 
             {{-- if simple voter user is logged in --}}
-
-            
-            <table>
-              
-              <tr>
-                <td>
-                  <span class="green_message"> Rezultatele voturilor vor fi afisate in data de 15.07.2019, ora 12:00!</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                      <table class="dbtbl">
-                        <tr><th>Top candidati</th></tr>
-                            @for($i = 0; $i < 11; $i++)
-                                <tr><td>
-                                {{ $i+1 . "." }}
-                                </tr></td>
-                                @endfor
-                      </table>
-                </td>
-              </tr>
-            </table>
+            @php
+                $myFile = "/srv/http/pollvot/public/state.txt";
+                $f = fopen($myFile, 'r');
+                $myFileContents = fread($f, filesize($myFile));
+                fclose($f);
+            @endphp
+                
+                @if (intval($myFileContents) == 0) 
+                    <table>
+                      <tr>
+                        <td>
+                          <span class="green_message"> Rezultatele 
+                            voturilor vor fi afisate in data de 15.07.2019, ora 12:00!</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                              <table class="dbtbl">
+                                <tr><th>Top candidati</th></tr>
+                                    @for($i = 0; $i < 11; $i++)
+                                        <tr><td>
+                                        
+                                        </tr></td>
+                                        @endfor
+                              </table>
+                        </td>
+                      </tr>
+                    </table>
 
         
-            {{--
-            <table>
-              
-              <tr>
-                <td>
-                  <span class="green_message"> Rezultatele voturilor vor fi afisate in data de 15.07.2019, ora 12:00!</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                      <table class="dbtbl">
-                        <tr><th>Top candidati</th></tr>
-                            @for($i = 0; $i < count($data['top_arr']); $i++)
-                                <tr><td>
-                                {{ $i+1 . ". " . $data['top_arr'][$i]->first_name . " " . $data['top_arr'][$i]->second_name }}
-                                {{ " (" . $data['top_arr'][$i]->party . ") " }}
-                                {{ $data['top_arr'][$i]->votes_cnt . " voturi" }}
-                                </tr></td>
-                                @endfor
-                      </table>
-                </td>
-              </tr>
-            </table>
-            --}}
+            @else
+                <table>
+                  
+                  <tr>
+                    <td>
+                          <table class="dbtbl">
+                            <tr><th>Top candidati</th></tr>
+                                @for($i = 0; $i < count($data['top_arr']); $i++)
+                                    <tr><td>
+                                    {{ $i+1 . ". " . $data['top_arr'][$i]->first_name . " " . $data['top_arr'][$i]->second_name }}
+                                    {{ " (" . $data['top_arr'][$i]->party . ") " }}
+                                    {{ $data['top_arr'][$i]->votes_cnt . " voturi" }}
+                                    </tr></td>
+                                    @endfor
+                          </table>
+                    </td>
+                  </tr>
+                </table>
+           @endif
             
         @endif
 

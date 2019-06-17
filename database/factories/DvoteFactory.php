@@ -14,24 +14,6 @@ $factory->define(App\Dvote::class, function (Faker $faker) {
     $candid_id_arr[$index] = 34;
     
 
-    /*
-        $priorities = array(
-        6=> 10,
-        5=> 40,
-        4=> 35,
-        3=> 5,
-        2=> 5
-    );
-
-    # you put each of the values N times, based on N being the probability
-    # each occurrence of the number in the array is a chance it will get picked up
-    # same is with lotteries
-    $numbers = array();
-    foreach($priorities as $k=>$v){
-        for($i=0; $i<$v; $i++)
-            $numbers[] = $k;
-    }
-     */
     $county_arr = array();
     for($i = 1; $i < 42; $i++)
         $county_arr[$i - 1] = $i;
