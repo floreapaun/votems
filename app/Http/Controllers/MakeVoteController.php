@@ -32,8 +32,7 @@ class MakeVoteController extends Controller
             'os' => 'required'
         ]);
 
-
-        //changes and county_name actually stores county_id 
+        //county_name actually stores county_id 
         $county_id = intval(request('county_name'));
         //dd($county_id);
         $county_name = DB::table('counties')->select('county_name')
