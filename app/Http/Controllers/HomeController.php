@@ -107,45 +107,48 @@ class HomeController extends Controller
             $data['candidate_arr'] = $candidate_arr;
 
         }
+        
+        //if logged user voted so far
         else
         {
             $data['user_voted'] = 1;
 
 
-        $fields = ['candidates.first_name', 'candidates.second_name', 'candidates.party'];
-        $top_arr = DB::table('candidates')
-                     ->join('votes', 'candidates.candidate_id', '=', 'votes.candidate_id')
-                     ->select($fields);
-        $top_arr = $top_arr->addSelect(DB::raw('count(candidates.first_name) as votes_cnt'))
-                               ->groupBy('candidates.first_name')
-                               ->orderBy('votes_cnt', 'DESC')
-                               ->take(10)
-                               ->get();
-        $data['top_arr'] = $top_arr;
+            $fields = ['candidates.first_name', 'candidates.second_name', 'candidates.party'];
+            $top_arr = DB::table('candidates')
+                         ->join('votes', 'candidates.candidate_id', '=', 'votes.candidate_id')
+                         ->select($fields);
+            $top_arr = $top_arr->addSelect(DB::raw('count(candidates.first_name) as votes_cnt'))
+                                   ->groupBy('candidates.first_name')
+                                   ->orderBy('votes_cnt', 'DESC')
+                                   ->take(10)
+                                   ->get();
+            $data['top_arr'] = $top_arr;
 
-        /*
-         SELECT voturi.data_vot, voturi.timp_vot,
-                          votant.nume, votant.prenume, candidat.nume, candidat.prenume
-                          FROM voturi
-                          INNER JOIN votant ON voturi.id_votant=votant.id_votant
-                          INNER JOIN candidat ON voturi.id_candidat=candidat.id_candidat
-                          ORDER BY voturi.id_votant DESC LIMIT 10
-        */
-        $fields = ['votes.vote_date', 'votes.vote_time', 
-                    'users.first_name', 'users.second_name'];
-        $last_arr = DB::table('votes')
-                    ->join('users', 'votes.user_id', '=', 'users.user_id')
-                    ->join('candidates', 'votes.candidate_id', '=', 'candidates.candidate_id')
-                    ->select($fields);
-        $last_arr = $last_arr->addSelect(DB::raw('candidates.first_name as cfirst_name'))
-                    ->addSelect(DB::raw('candidates.second_name as csecond_name'))
-                    ->orderBy('votes.user_id', 'desc')
-                    ->take(10)
-                    ->get(); 
-        $data['last_arr'] = $last_arr;
+            /*
+             SELECT voturi.data_vot, voturi.timp_vot,
+                              votant.nume, votant.prenume, candidat.nume, candidat.prenume
+                              FROM voturi
+                              INNER JOIN votant ON voturi.id_votant=votant.id_votant
+                              INNER JOIN candidat ON voturi.id_candidat=candidat.id_candidat
+                              ORDER BY voturi.id_votant DESC LIMIT 10
+            */
+            $fields = ['votes.vote_date', 'votes.vote_time', 
+                        'users.first_name', 'users.second_name'];
+            $last_arr = DB::table('votes')
+                        ->join('users', 'votes.user_id', '=', 'users.user_id')
+                        ->join('candidates', 'votes.candidate_id', '=', 'candidates.candidate_id')
+                        ->select($fields);
+            $last_arr = $last_arr->addSelect(DB::raw('candidates.first_name as cfirst_name'))
+                        ->addSelect(DB::raw('candidates.second_name as csecond_name'))
+                        ->orderBy('votes.user_id', 'desc')
+                        ->take(10)
+                        ->get(); 
+            $data['last_arr'] = $last_arr;
         }
         //dd(compact("data"));
 
         return view('home', compact("data"));
     }
 }
+
