@@ -1,15 +1,5 @@
-{{--
-@auth
-    @extends('layouts.app-login')
-@else
-    @extends('layouts.app')
-@endauth
---}}
-
 @extends('layouts.app-login')
-
 @section('content')
-
 
 @if ($data['user_voted']==0)
     <form id='voteform' method="post" action='/makevote'>
@@ -90,7 +80,7 @@
     </form>
    @else
 
-       {{-- if logged user is the administrator --}}     
+       <!-- if logged user is the administrator -->     
        @if (Auth::user()->user_id == 877)
 
             <table>
@@ -126,7 +116,7 @@
             </table>
         @else
 
-            {{-- if simple voter user is logged in --}}
+            <!-- if simple voter user is logged in -->
             @php
                 $myFile = "/srv/http/pollvot/public/state.txt";
                 $f = fopen($myFile, 'r');
@@ -180,6 +170,8 @@
         @endif
 
 @endif
-
 @endsection
+
+
+
 
