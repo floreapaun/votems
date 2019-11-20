@@ -253,6 +253,7 @@ $('#county').on('change', function(){
     $("#div_area").removeClass('hidden');   
 });
 
+pppp
 $("#gdp_county").on('change', function() {
     
     var nowgdp = $("#gdp_county").find(':selected').data('gdp')
