@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name') }}</title>
+    <title>PollVot</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script> 
@@ -27,11 +27,11 @@
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/home') }}">
-                    {{ config('app.name') }}
+                    PollVot
                 </a>
-                {{-- afisez pentru votant doar cand votarea s-a terminat --}}
+                <!-- show vote results when vote ended -->
                 @php
-                    $myFile = "/srv/http/pollvot/public/state.txt";
+                    $myFile = __DIR__ . '/../../../public/state.txt';
                     $f = fopen($myFile, 'r');
                     $myFileContents = fread($f, filesize($myFile));
                     fclose($f);

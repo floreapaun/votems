@@ -118,7 +118,7 @@
 
             <!-- if simple voter user is logged in -->
             @php
-                $myFile = "/srv/http/pollvot/public/state.txt";
+                $myFile = __DIR__ . '/../../../public/state.txt';
                 $f = fopen($myFile, 'r');
                 $myFileContents = fread($f, filesize($myFile));
                 fclose($f);

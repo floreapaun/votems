@@ -15,10 +15,9 @@ span.badge.badge-primary, button.badge.badge-success, span.badge.badge-danger
     <div class="col-sm">
     </div>
     <div class="col-sm-8">
-    
 
         @php
-            $myFile = "/srv/http/pollvot/public/state.txt";
+            $myFile = __DIR__ . '/../../../public/state.txt';
             $f = fopen($myFile, 'r');
             $myFileContents = fread($f, filesize($myFile));
             fclose($f);
@@ -43,7 +42,7 @@ span.badge.badge-primary, button.badge.badge-success, span.badge.badge-danger
                             data-gdp='{{ $data['countygdp_arr'][$i]->gdp }}' >
                                     {{ $data['countyname_arr'][$i]->county_name }}    
                     </option>
-                    @endfor
+                @endfor
             </select>
           </div>
         </div>
