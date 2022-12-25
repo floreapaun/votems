@@ -319,11 +319,20 @@ class AjaxController extends Controller
    public function write_voting_state() {
      $stop_vote = $_POST["stop_vote"];
 
-     $myFile = "/srv/http/pollvot/public/state.txt";
+     $myFile = __DIR__ . '/../../../public/state.txt';
      $myFileLink = fopen($myFile, 'w+') or die("Can't open file.");
      fwrite($myFileLink, $stop_vote);
      fclose($myFileLink);
 
      return response()->json("sucess", 200);
+   }
+
+   public function predict_script() {
+     $str = 'python G:\Programs\xampp\htdocs\pollvot\cgi-bin\predict_script.py ' . $_POST['education'] .
+     " " . $_POST['income'] . " " . $_POST['family'] . " " . $_POST['region'] . " " . $_POST['county'] . 
+     " " . $_POST['age'] . " " . $_POST['area'];
+
+     $output=shell_exec($str);
+     return response()->json(['pred' => $output], 200);
    }
 }

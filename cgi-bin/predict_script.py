@@ -14,22 +14,14 @@ from keras.callbacks import EarlyStopping
 from keras.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt
 
-
 import sys
 import json
-import cgi
 
-sys.stdout.write("Content-Type: application/json")
-sys.stdout.write("\n")
-sys.stdout.write("\n")
-
-path = "/srv/http/pollvot/cgi-bin/"
+path = 'G:\\Programs\\xampp\\htdocs\\pollvot\\cgi-bin'
 filename_read = os.path.join(path,"dvotes.csv")
 
 # load model
-model = load_model('model.h5')
-
-fs = cgi.FieldStorage()
+model = load_model(os.path.join(path, 'model.h5'))
 
 #read the content inside a DataFrame object
 df = pd.read_csv(filename_read,na_values=['NA','?'])
@@ -41,34 +33,16 @@ y=dataset[:,7]
 
 arr = np.arange(7)
 
-# values come in random order
-for k in fs.keys():
-    if (k == "education"):
-        arr[0] = fs.getvalue(k)
-    if (k == "income"):
-        arr[1] = fs.getvalue(k)
-    if (k == "family"):
-        arr[2] = fs.getvalue(k)
-    if (k == "region"):
-        arr[3] = fs.getvalue(k)
-    if (k == "county"):
-        arr[4] = fs.getvalue(k)
-    if (k == "age"):
-        arr[5] = fs.getvalue(k)
-    if (k == "area"):
-        arr[6] = fs.getvalue(k)
+for i in range(1, len(sys.argv)):
+    arr[i-1] = sys.argv[i]
 
 a = np.array([arr])
-pred = model.predict(a)
+pred = model.predict(a, verbose=0)
 
 for x in np.nditer(pred):
     val = x
 arr = val.ravel()
 
-result = {}
-result['pred'] = json.dumps(int(round(arr[0].item())))  
-
-sys.stdout.write(json.dumps(result,indent=1))
-sys.stdout.write("\n")
+sys.stdout.write(json.dumps(int(round(arr[0].item()))) )
 sys.stdout.close()
 

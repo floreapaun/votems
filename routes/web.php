@@ -21,6 +21,7 @@ Route::get('/update', 'UpdateController@index')->name('update');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
 Route::post('/get_avg_age', 'AjaxController@get_avg_age')->name('get_avg_age');
 Route::post('/update_gdp', 'AjaxController@update_gdp')->name('update_gdp');
 Route::post('/write_voting_state', 'AjaxController@write_voting_state')->name('write_voting_state');
@@ -29,6 +30,8 @@ Route::post('/get_win_corrupt', 'AjaxController@get_win_corrupt')->name('get_win
 Route::post('/get_cnt_poor', 'AjaxController@get_cnt_poor')->name('get_cnt_poor');
 Route::post('/getcandid', 'AjaxController@getcandid')->name('getcandid');
 Route::post('/getparty', 'AjaxController@getparty')->name('getparty');
+Route::post('/predict_script', 'AjaxController@predict_script')->name('predict_script');
+
 Route::post('/makevote', 'MakeVoteController@store')->name('makevote');
 Route::post('/get_image_data_TopReg', 'AjaxController@get_image_data_TopReg')->name('get_image_data_TopReg');
 Route::post('/get_image_data_TopYng', 'AjaxController@get_image_data_TopYng')->name('get_image_data_TopYng');

@@ -216,14 +216,14 @@ $('#area').on('change', function(){
     $("#div_bar").removeClass('hidden');   
 
     $.ajax({
-        url: "http://pollvot/cgi-bin/predict_script.py",
+        url: "/predict_script",
         type: "post",
-        dataType:"json",
-        data: user_data ,
+        dataType: "json",
+        data: user_data,
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function(response){
                     $("#div_bar").removeClass('hidden');   
                     $('#candidate').val(response.pred);
-
                     var candid_id = response.pred;
                     $.ajax({ 
                         type: 'POST',
@@ -283,8 +283,7 @@ $("#corr_county").on('change', function() {
 }); 
 
 $(document).on('click', '#BttnSendGdp', function() {
-  console.log("aaa");
-
+    
   var newgdp = $("#gdp_up_input").val();
   console.log(newgdp);
   var county = $("#gdp_county").val();
@@ -302,7 +301,6 @@ $(document).on('click', '#BttnSendGdp', function() {
 });
 
 $(document).on('click', '#BttnSendCorr', function() {
-  console.log("aaa");
 
   var newcorr = $("#corr_up_input").val();
   var county = $("#corr_county").val();
