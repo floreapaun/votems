@@ -6,10 +6,9 @@ How to run app
 2. Create .env file with MySQL credentials
 3. Install Python and Python packages: sklearn, keras, tensorflow, pandas
 4. Make sure Python is globally accessible by setting environment variable
-5. Update absolute location of script inside predict_script.py (e.g. G:\Programs\xampp\htdocs\pollvot\cgi-bin) and AjaxController.php (e.g `$str = 'python G:\Programs\xampp\htdocs\pollvot\cgi-bin\predict_script.py '`)
-6. Run `composer install` 
-7. Run `php artisan serve`
-8. Administrator user credentials are email: administrator@pollvot.app and password: 12345678
+5. Run `composer install` 
+6. Run `php artisan serve`
+7. Administrator user credentials are email: administrator@pollvot.app and password: 12345678
 
 ## Screenshots 
 - Home page
