@@ -328,7 +328,9 @@ class AjaxController extends Controller
    }
 
    public function predict_script() {
-     $str = 'python G:\Programs\xampp\htdocs\pollvot\cgi-bin\predict_script.py ' . $_POST['education'] .
+     $pythonScriptPath = dirname(dirname(dirname(dirname(__FILE__)))) . "\cgi-bin\predict_script.py";
+
+     $str = "python " . $pythonScriptPath . " " . $_POST['education'] .
      " " . $_POST['income'] . " " . $_POST['family'] . " " . $_POST['region'] . " " . $_POST['county'] . 
      " " . $_POST['age'] . " " . $_POST['area'];
 

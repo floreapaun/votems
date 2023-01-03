@@ -17,8 +17,8 @@ import matplotlib.pyplot as plt
 import sys
 import json
 
-path = 'G:\\Programs\\xampp\\htdocs\\pollvot\\cgi-bin'
-filename_read = os.path.join(path,"dvotes.csv")
+path = os.path.abspath(os.path.join(os.getcwd(), os.pardir)) + '\cgi-bin'
+filename_read = os.path.join(path, "dvotes.csv")
 
 # load model
 model = load_model(os.path.join(path, 'model.h5'))
